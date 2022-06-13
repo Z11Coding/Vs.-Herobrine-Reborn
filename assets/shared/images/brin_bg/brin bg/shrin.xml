@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="shrin.png">
+	<!-- Created with Adobe Animate version 22.0.3.179 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="shrine instance 10000" x="100" y="100" width="475" height="501"/>
+	<SubTexture name="shrine instance 10001" x="675" y="100" width="475" height="501"/>
+	<SubTexture name="shrine instance 10002" x="1250" y="100" width="475" height="501"/>
+	<SubTexture name="shrine instance 10003" x="100" y="701" width="475" height="501"/>
+	<SubTexture name="shrine instance 10004" x="675" y="701" width="475" height="501"/>
+	<SubTexture name="shrine instance 10005" x="1250" y="701" width="475" height="501"/>
+	<SubTexture name="shrine instance 10006" x="100" y="100" width="475" height="501"/>
+	<SubTexture name="shrine instance 10007" x="675" y="100" width="475" height="501"/>
+	<SubTexture name="shrine instance 10008" x="1250" y="100" width="475" height="501"/>
+	<SubTexture name="shrine instance 10009" x="100" y="701" width="475" height="501"/>
+</TextureAtlas>

@@ -1,0 +1,50 @@
+{
+	"storyName": "Herobrin is in your doorknob. start running. now!",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "dangbrothatscrazy",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": false,
+	"songs": [
+		[
+			"summon",
+			"Brin",
+			[
+				40,
+				0,
+				93
+			]
+		],
+		[
+			"final warning",
+			"Brin",
+			[
+				40,
+				0,
+				93
+			]
+		],
+		[
+			"no escape",
+			"Brin",
+			[
+				40,
+				0,
+				93
+			]
+		]
+	],
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"hiddenUntilUnlocked": true,
+	"weekName": "da Hero of Brines"
+}
