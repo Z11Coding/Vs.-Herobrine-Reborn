@@ -297,6 +297,7 @@ class PlayState extends MusicBeatState
 	var thunderON:Bool = false;
 	public static var crashthegame:Bool = false; //Cringe Nae Nae Baby.
 	public static var diedcuz:String = '';
+	var warning:FlxSprite;
 
 	var precacheList:Map<String, String> = new Map<String, String>();
 
@@ -1379,6 +1380,13 @@ class PlayState extends MusicBeatState
 		{
 			daRain.animation.play('rain');
 		}
+		
+		warning = new FlxSprite(0, 0).loadGraphic(Paths.image('noescapewarn'));
+		warning.setGraphicSize(FlxG.width, FlxG.height);
+		warning.screenCenter();
+		warning.cameras = [camCustom];
+		warning.alpha = 0;
+		add(warning);
 	}
 
 	function set_songSpeed(value:Float):Float
@@ -4901,6 +4909,15 @@ class PlayState extends MusicBeatState
 		if (generatedMusic)
 		{
 			notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
+		}
+
+		switch(curBeat)
+		{
+			case 4:
+				FlxTween.tween(warning, {alpha: 1}, 1, {ease: FlxEase.expoInOut});
+
+			case 124:
+				FlxTween.tween(warning, {alpha: 0}, 1, {ease: FlxEase.expoInOut});
 		}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
