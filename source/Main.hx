@@ -10,6 +10,12 @@ import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.display.StageScaleMode;
+import openfl.events.ErrorEvent;
+import haxe.Exception;
+import openfl.errors.Error;
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import lime.app.Application;
 
 class Main extends Sprite
 {
@@ -32,6 +38,7 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
 
 		if (stage != null)
 		{

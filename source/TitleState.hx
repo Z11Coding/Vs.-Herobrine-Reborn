@@ -35,6 +35,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Assets;
+import sys.io.Process;
 
 using StringTools;
 typedef TitleData =
@@ -78,6 +79,10 @@ class TitleState extends MusicBeatState
 	var mustUpdate:Bool = false;
 
 	var titleJSON:TitleData;
+	var daRain:FlxSprite;
+	var daRain2:FlxSprite;
+	var streamer:Bool = false;
+	var scary:Bool = false;
 
 	public static var updateVersion:String = '';
 
@@ -91,6 +96,18 @@ class TitleState extends MusicBeatState
 		#end
 		// Just to load a mod on start up if ya got one. For mods that change the menu music and bg
 		WeekData.loadTheFirstEnabledMod();
+
+		var taskList = new Process("tasklist", []);
+		var hereyouare = taskList.stdout.readAll().toString().toLowerCase();	
+		var checkProgram:Array<String> = ['obs64.exe', 'obs32.exe', 'streamlabs obs.exe', 'streamlabs obs32.exe'];
+		for (i in 0...checkProgram.length)
+		{
+			if (hereyouare.contains(checkProgram[i]))
+			{
+				streamer = true;
+			}
+		}
+		taskList.close();
 
 		//trace(path, FileSystem.exists(path));
 
@@ -219,6 +236,23 @@ class TitleState extends MusicBeatState
 			});
 		}
 		#end
+		daRain = new FlxSprite(0, 0);
+		daRain.frames = Paths.getSparrowAtlas('rain');
+		daRain.animation.addByIndices('rain','rain tho', [0, 2, 4, 6, 8, 10, 12, 14, 16, 18], "", 24, false);
+		daRain.animation.play('rain');
+		daRain.setGraphicSize(FlxG.width, FlxG.height);
+		daRain.screenCenter();
+		//daRain.cameras = [camCustom];
+		daRain.alpha = 0;
+		
+		daRain2 = new FlxSprite(0, 0);
+		daRain2.frames = Paths.getSparrowAtlas('rain');
+		daRain2.animation.addByIndices('rain','rain tho', [0, 2, 4, 6, 8, 10, 12, 14, 16, 18], "", 24, false);
+		daRain2.animation.play('rain');
+		daRain2.setGraphicSize(FlxG.width, FlxG.height);
+		daRain2.screenCenter();
+		//daRain.cameras = [camCustom];
+		daRain2.alpha = 0;
 	}
 
 	var logoBl:FlxSprite;
@@ -273,15 +307,24 @@ class TitleState extends MusicBeatState
 		// bg.updateHitbox();
 		add(bg);
 
+		add(daRain);
+		daRain.animation.play('rain');
+		daRain.animation.finishCallback = function(pog:String)
+		{
+			daRain.animation.play('rain');
+		}
+		daRain.alpha = 1;
 		logoBl = new FlxSprite(titleJSON.titlex, titleJSON.titley);
-		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
+		logoBl.frames = Paths.getSparrowAtlas('brin_logo');
 
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
-		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
+		logoBl.animation.addByPrefix('bump', 'brin logoBumpin instance 1', 24, false);
 		logoBl.animation.play('bump');
+		//logoBl.setGraphicSize(Std.int(logoBl.width * 0.8));
 		logoBl.updateHitbox();
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
+		logoBl.angle = -5;
 
 		swagShader = new ColorSwap();
 		gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
@@ -314,15 +357,14 @@ class TitleState extends MusicBeatState
 			//EDIT THIS ONE IF YOU'RE MAKING A SOURCE CODE MOD!!!!
 			//EDIT THIS ONE IF YOU'RE MAKING A SOURCE CODE MOD!!!!
 			//EDIT THIS ONE IF YOU'RE MAKING A SOURCE CODE MOD!!!!
-				gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-				gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-				gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+				gfDance.frames = Paths.getSparrowAtlas('RECOVER_Vs_Herobrine_Reborn_Thumbnail');
+				gfDance.animation.addByPrefix('idle', 'brin instance 1', 24, false);
 		}
 		gfDance.antialiasing = ClientPrefs.globalAntialiasing;
 
-		add(gfDance);
-		gfDance.shader = swagShader.shader;
 		add(logoBl);
+		gfDance.shader = swagShader.shader;
+		add(gfDance);
 		logoBl.shader = swagShader.shader;
 
 		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
@@ -364,6 +406,14 @@ class TitleState extends MusicBeatState
 
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		credGroup.add(blackScreen);
+
+		add(daRain2);
+		daRain2.animation.play('rain');
+		daRain2.animation.finishCallback = function(pog:String)
+		{
+			daRain2.animation.play('rain');
+		}
+		daRain2.alpha = 1;
 
 		credTextShit = new Alphabet(0, 0, "", true);
 		credTextShit.screenCenter();
@@ -413,6 +463,11 @@ class TitleState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
+
+		daRain.animation.finishCallback = function(pog:String)
+		{
+			daRain.animation.play('rain');
+		}
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT;
 
@@ -572,9 +627,9 @@ class TitleState extends MusicBeatState
 		if(gfDance != null) {
 			danceLeft = !danceLeft;
 			if (danceLeft)
-				gfDance.animation.play('danceRight');
+				gfDance.animation.play('idle');
 			else
-				gfDance.animation.play('danceLeft');
+				gfDance.animation.play('idle');
 		}
 
 		if(!closedState) {
@@ -586,66 +641,159 @@ class TitleState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
-					#if PSYCH_WATERMARKS
-					createCoolText(['Psych Engine by'], 15);
-					#else
-					createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
-					#end
-				// credTextShit.visible = true;
+					if (streamer)
+						createCoolText(['Psych Engine by'], 15);
+					else if (FlxG.random.bool(50))
+					{
+						scary = true;
+						createCoolText(['Look!'], 15);
+					}
+					else
+					{
+						#if PSYCH_WATERMARKS
+						createCoolText(['Psych Engine by'], 15);
+						#else
+						createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
+						#end
+					}
 				case 4:
-					#if PSYCH_WATERMARKS
-					addMoreText('Shadow Mario', 15);
-					addMoreText('RiverOaken', 15);
-					addMoreText('shubs', 15);
-					#else
-					addMoreText('present');
-					#end
-				// credTextShit.text += '\npresent...';
-				// credTextShit.addText();
+					if (streamer)
+						addMoreText('Wait A Minute...', 15);
+					else if (scary)
+					{
+						addMoreText('BEHIND YOU!', 15);
+					}
+					else
+					{
+						#if PSYCH_WATERMARKS
+						addMoreText('Shadow Mario', 15);
+						addMoreText('RiverOaken', 15);
+						addMoreText('shubs', 15);
+						#else
+						addMoreText('present');
+						#end
+					}
 				case 5:
-					deleteCoolText();
-				// credTextShit.visible = false;
-				// credTextShit.text = 'In association \nwith';
-				// credTextShit.screenCenter();
+					if (scary)
+					{
+						deleteCoolText();
+						FlxG.sound.music.pause();
+						new FlxTimer().start(2, function(tmr:FlxTimer)
+						{
+							FlxG.sound.music.play();
+						});
+					}
+					else
+						deleteCoolText();
+
 				case 6:
-					#if PSYCH_WATERMARKS
-					createCoolText(['Not associated', 'with'], -40);
-					#else
-					createCoolText(['In association', 'with'], -40);
-					#end
+					if (streamer)
+						createCoolText(['Are You..'], -40);
+					else if (scary)
+						createCoolText(['HA HA!'], -40);
+					else
+					{
+						#if PSYCH_WATERMARKS
+						createCoolText(['Not associated', 'with'], -40);
+						#else
+						createCoolText(['In association', 'with'], -40);
+						#end
+					}
 				case 8:
-					addMoreText('newgrounds', -40);
-					ngSpr.visible = true;
-				// credTextShit.text += '\nNewgrounds';
+					if (streamer)
+						addMoreText('No Way...', 15);
+					else if (scary)
+					{
+						addMoreText('MADE YOU LOOK!', -40);
+						scary = false;
+					}
+					else
+					{
+						addMoreText('newgrounds', -40);
+						ngSpr.visible = true;
+					}
 				case 9:
 					deleteCoolText();
 					ngSpr.visible = false;
-				// credTextShit.visible = false;
-
-				// credTextShit.text = 'Shoutouts Tom Fulp';
-				// credTextShit.screenCenter();
 				case 10:
+					if (streamer)
+						createCoolText(['Bro FR?'], -40);
+					else
+						createCoolText(['This Took'], -40);
+
+				case 12:
+					if (streamer)
+						addMoreText('U Recording/Streamin?', -40);
+					else
+						addMoreText('5 Days LOL', -40);
+				case 13:
+					deleteCoolText();
+
+				case 14:
+					if (streamer)
+						createCoolText(['On God?'], -40);
+					else
+						createCoolText(['Anyways'], -40);
+				case 16:
+					if (streamer)
+						addMoreText('No Cap?', -40);
+					else
+						addMoreText('Random Quote Time.', -40);
+				case 17:
+					deleteCoolText();
+				
+				case 18:
 					createCoolText([curWacky[0]]);
 				// credTextShit.visible = true;
-				case 12:
+				case 20:
 					addMoreText(curWacky[1]);
 				// credTextShit.text += '\nlmao';
-				case 13:
+				case 21:
+					deleteCoolText();
+
+				case 22:
+					curWacky = FlxG.random.getObject(getIntroTextShit());
+					createCoolText([curWacky[0]]);
+				// credTextShit.visible = true;
+				case 24:
+					addMoreText(curWacky[1]);
+				// credTextShit.text += '\nlmao';
+				case 25:
+					deleteCoolText();
+
+				case 26:
+					curWacky = FlxG.random.getObject(getIntroTextShit());
+					createCoolText([curWacky[0]]);
+				// credTextShit.visible = true;
+				case 28:
+					addMoreText(curWacky[1]);
+				// credTextShit.text += '\nlmao';
+				case 29:
 					deleteCoolText();
 				// credTextShit.visible = false;
 				// credTextShit.text = "Friday";
 				// credTextShit.screenCenter();
-				case 14:
-					addMoreText('Friday');
-				// credTextShit.visible = true;
-				case 15:
-					addMoreText('Night');
-				// credTextShit.text += '\nNight';
-				case 16:
-					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
 
-				case 17:
-					skipIntro();
+				case 30:
+					if (streamer)
+						addMoreText('Why');
+					else
+						addMoreText('Vs.');
+				case 31:
+					if (streamer)
+						addMoreText('Hello');
+					else
+						addMoreText('Herobrine');
+				case 32:
+						if (FlxG.random.bool(0.5) && streamer)
+							addMoreText(Sys.environment()["USERNAME"]); // credTextShit.text += '\nFunkin';
+					else if (streamer)
+						addMoreText('Chat'); // credTextShit.text += '\nFunkin';
+					else
+						addMoreText('REBORN');
+					case 33:
+						skipIntro();
+						daRain2.alpha = 0;
 			}
 		}
 	}

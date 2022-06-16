@@ -19,7 +19,14 @@ class Achievements {
 		["Just the Two of Us",			"Finish a Song pressing only two keys.",			'two_keys',				false],
 		["Toaster Gamer",				"Have you tried to run the game on a toaster?",		'toastie',				false],
 		["Debugger",					"Beat the \"Test\" Stage from the Chart Editor.",	'debugger',				 true],
-		["Removed Herobrine",			"Beat the Week with no Misses.",					'nohero',				 true]
+		["Removed Herobrine",			"Beat the Week with no Misses.",					'nohero',				 true],
+		["No Escape?",					"Die To The Miss Limit 3 Times.",					'thelimit',				 true],
+		["CHEATER ALERT!",				"Turn On Botplay.",									'cheater',				 true],
+		["How Are You This Bad?",		"Die On Every Song.",								'justbad',				 true],
+		["You forget how to block?",	"Die To The Fireball Notes.",						'fireball',				 true],
+		["You Fool!",					"FC Summon.",										'summoned',				 true],
+		["WHAT HAVE YOU DONE?!",		"FC Final Warning.",								'warned',				 true],
+		["RUN FOR YOUR LIFE!!",			"FC No Escape.",									'escape',				 true]
 	];
 	public static var achievementsMap:Map<String, Bool> = new Map<String, Bool>();
 

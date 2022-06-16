@@ -261,7 +261,7 @@ class PlayState extends MusicBeatState
 	public static var daPixelZoom:Float = 6;
 	private var singAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 
-	public var inCutscene:Bool = false;
+	public static var inCutscene:Bool = false;
 	public var skipCountdown:Bool = false;
 	var songLength:Float = 0;
 
@@ -295,6 +295,8 @@ class PlayState extends MusicBeatState
 	private var keysArray:Array<Dynamic>;
 	var daRain:FlxSprite;
 	var thunderON:Bool = false;
+	public static var crashthegame:Bool = false; //Cringe Nae Nae Baby.
+	public static var diedcuz:String = '';
 
 	var precacheList:Map<String, String> = new Map<String, String>();
 
@@ -1344,6 +1346,7 @@ class PlayState extends MusicBeatState
 		callOnLuas('onCreatePost', []);
 
 		super.create();
+		thebot = false;
 
 		Paths.clearUnusedMemory();
 
@@ -2737,6 +2740,10 @@ class PlayState extends MusicBeatState
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 	var limoSpeed:Float = 0;
+	public static var thebot:Bool = false;
+	public static var sumdeath:Bool = false;
+	public static var finaldeath:Bool = false;
+	public static var escdeath:Bool = false;
 
 	override public function update(elapsed:Float)
 	{
@@ -2745,6 +2752,32 @@ class PlayState extends MusicBeatState
 			iconP1.swapOldIcon();
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
+
+		if (cpuControlled != thebot)
+		{
+			thebot = true;
+			crashthegame = true;
+		}
+
+		if (!sumdeath && deathCounter >= 0)
+		{
+			sumdeath = true;
+		}
+
+		if (!finaldeath && deathCounter >= 0)
+		{
+			finaldeath = true;
+		}
+
+		if (!finaldeath && deathCounter >= 0)
+		{
+			finaldeath = true;
+		}
+
+		if (!escdeath && deathCounter >= 0)
+		{
+			escdeath = true;
+		}
 
 		daRain.animation.finishCallback = function(pog:String)
 		{
@@ -3785,9 +3818,8 @@ class PlayState extends MusicBeatState
 		if(achievementObj != null) {
 			return;
 		} else {
-			var achieve:String = checkForAchievement(['week1_nomiss', 'week2_nomiss', 'week3_nomiss', 'week4_nomiss',
-				'week5_nomiss', 'week6_nomiss', 'week7_nomiss', 'ur_bad',
-				'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
+			var achieve:String = checkForAchievement(['nohero', 'cheater', 'ur_bad', 'summoned', 'warned', 'escape',
+				'ur_good', 'hype', 'two_keys']);
 
 			if(achieve != null) {
 				startAchievement(achieve);
@@ -3914,7 +3946,14 @@ class PlayState extends MusicBeatState
 	function achievementEnd():Void
 	{
 		achievementObj = null;
-		if(endingSong && !inCutscene) {
+		if (PlayState.crashthegame)
+		{
+			crashthegame = false;
+			Sys.sleep(1);
+			Sys.command('mshta vbscript:Execute("msgbox ""Botplay Is Cringe. Dont Turn It On. Play Like A Big Boy Or Dont Play At All."":close")');
+			Sys.exit(1);
+		}
+		else if(endingSong && !inCutscene) {
 			endSong();
 		}
 	}
@@ -4353,6 +4392,12 @@ class PlayState extends MusicBeatState
 			char.playAnim(animToPlay, true);
 		}
 
+		if (daNote.noteType == 'Attack')
+		{
+			diedcuz = 'Attack';
+			songMisses++;
+		}
+
 		callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote, daNote.ID]);
 	}
 
@@ -4481,6 +4526,8 @@ class PlayState extends MusicBeatState
 								boyfriend.playAnim('hurt', true);
 								boyfriend.specialAnim = true;
 							}
+						case 'Attack': //Hurt note
+							diedcuz = 'Attack';
 					}
 				}
 
@@ -4755,18 +4802,6 @@ class PlayState extends MusicBeatState
 				limoCorpse.visible = false;
 				limoCorpseTwo.visible = false;
 				limoKillingState = 1;
-
-				#if ACHIEVEMENTS_ALLOWED
-				Achievements.henchmenDeath++;
-				FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
-				var achieve:String = checkForAchievement(['roadkill_enthusiast']);
-				if (achieve != null) {
-					startAchievement(achieve);
-				} else {
-					FlxG.save.flush();
-				}
-				FlxG.log.add('Deaths: ' + Achievements.henchmenDeath);
-				#end
 			}
 		}
 	}
@@ -5128,33 +5163,21 @@ class PlayState extends MusicBeatState
 	{
 		if(chartingMode) return null;
 
-		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice', false) || ClientPrefs.getGameplaySetting('botplay', false));
+		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice', false) || ClientPrefs.getGameplaySetting('botplay', false) || thebot);
 		for (i in 0...achievesToCheck.length) {
 			var achievementName:String = achievesToCheck[i];
 			if(!Achievements.isAchievementUnlocked(achievementName) && !cpuControlled) {
 				var unlock:Bool = false;
 				switch(achievementName)
 				{
-					case 'week1_nomiss' | 'week2_nomiss' | 'week3_nomiss' | 'week4_nomiss' | 'week5_nomiss' | 'week6_nomiss' | 'week7_nomiss':
+					case 'nohero':
 						if(isStoryMode && campaignMisses + songMisses < 1 && CoolUtil.difficultyString() == 'HARD' && storyPlaylist.length <= 1 && !changedDifficulty && !usedPractice)
 						{
 							var weekName:String = WeekData.getWeekFileName();
 							switch(weekName) //I know this is a lot of duplicated code, but it's easier readable and you can add weeks with different names than the achievement tag
 							{
-								case 'week1':
-									if(achievementName == 'week1_nomiss') unlock = true;
-								case 'week2':
-									if(achievementName == 'week2_nomiss') unlock = true;
-								case 'week3':
-									if(achievementName == 'week3_nomiss') unlock = true;
-								case 'week4':
-									if(achievementName == 'week4_nomiss') unlock = true;
-								case 'week5':
-									if(achievementName == 'week5_nomiss') unlock = true;
-								case 'week6':
-									if(achievementName == 'week6_nomiss') unlock = true;
-								case 'week7':
-									if(achievementName == 'week7_nomiss') unlock = true;
+								case 'Herobrinelul':
+									if(achievementName == 'nohero') unlock = true;
 							}
 						}
 					case 'ur_bad':
@@ -5163,10 +5186,6 @@ class PlayState extends MusicBeatState
 						}
 					case 'ur_good':
 						if(ratingPercent >= 1 && !usedPractice) {
-							unlock = true;
-						}
-					case 'roadkill_enthusiast':
-						if(Achievements.henchmenDeath >= 100) {
 							unlock = true;
 						}
 					case 'oversinging':
@@ -5188,12 +5207,35 @@ class PlayState extends MusicBeatState
 								unlock = true;
 							}
 						}
-					case 'toastie':
-						if(/*ClientPrefs.framerate <= 60 &&*/ ClientPrefs.lowQuality && !ClientPrefs.globalAntialiasing && !ClientPrefs.imagesPersist) {
+					case 'thelimit':
+						if (deathCounter == 3 && Paths.formatToSongPath(SONG.song) == 'no-escape')
+						{
 							unlock = true;
 						}
-					case 'debugger':
-						if(Paths.formatToSongPath(SONG.song) == 'test' && !usedPractice) {
+					case 'cheater':
+						if (thebot)
+						{
+							unlock = true;
+							crashthegame = true;
+						}
+					case 'justbad':
+						if (sumdeath && finaldeath && escdeath && isStoryMode)
+						{
+							unlock = true;
+						}
+					case 'summoned':
+						if (Paths.formatToSongPath(SONG.song) == 'summon' && songMisses == 0)
+						{
+							unlock = true;
+						}
+					case 'warned':
+						if (Paths.formatToSongPath(SONG.song) == 'final-warning' && songMisses == 0)
+						{
+							unlock = true;
+						}
+					case 'escape':
+						if (Paths.formatToSongPath(SONG.song) == 'no-escape' && songMisses == 0)
+						{
 							unlock = true;
 						}
 				}

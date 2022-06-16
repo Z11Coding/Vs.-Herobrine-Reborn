@@ -81,6 +81,15 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Vs. Herobrine REBIRTHED Team'],
+			['Magi',				'u-magi',			'Director/Charter',						'https://twitter.com/MagiciansWRLD',						'fcd7d6'],
+			['JDST',				'JDST_Aquamarine',	'Director/Animator/Musician',			'https://twitter.com/JDSTtwt',								'00e1a9'],
+			['Lemmeo',				'Lemon',			'Charter',								'https://twitter.com/Lemmeoo',								'ffff00'],
+			['Vurn',				'',					'Animator',								'https://www.youtube.com/watch?v=HV8IxKtAlrA',				'279ADC'],
+			['Teserex',				'tex',				'Animator',								'https://twitter.com/teserex_exe',							'fc9303'],
+			['Z11Gaming',			'u-z',				'Coder/Game Over Composer',				'https://www.youtube.com/watch?v=doEqUhFiQS4',				'684d77'],
+			['BlitzCyber',			'blitz',			'Game Over Composer',					'https://www.youtube.com/channel/UC36S-z45l7XhwLkIeRwHGzw',	'684d77'],
+			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',							'https://twitter.com/Shadow_Mario_',	'444444'],
 			['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',						'https://twitter.com/RiverOaken',		'C30085'],

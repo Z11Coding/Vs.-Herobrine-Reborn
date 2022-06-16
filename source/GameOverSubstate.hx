@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxObject;
+import flixel.FlxCamera;
 import flixel.FlxSubState;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
@@ -9,6 +10,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import Achievements;
 
 class GameOverSubstate extends MusicBeatSubstate
 {
@@ -26,6 +28,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	public static var endSoundName:String = 'gameOverEnd';
 
 	public static var instance:GameOverSubstate;
+
+	public var camOther:FlxCamera;
 
 	public static function resetVariables() {
 		characterName = 'bf_steve';
@@ -56,6 +60,8 @@ class GameOverSubstate extends MusicBeatSubstate
 		add(boyfriend);
 
 		camFollow = new FlxPoint(boyfriend.getGraphicMidpoint().x, boyfriend.getGraphicMidpoint().y);
+		camOther = new FlxCamera();
+		camOther.bgColor.alpha = 0;
 
 		FlxG.sound.play(Paths.sound(deathSoundName));
 		Conductor.changeBPM(100);
@@ -69,12 +75,35 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollowPos = new FlxObject(0, 0, 1, 1);
 		camFollowPos.setPosition(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2));
 		add(camFollowPos);
+		FlxG.cameras.add(camOther);
+
+		if (PlayState.diedcuz == 'Attack') {
+			#if ACHIEVEMENTS_ALLOWED
+			var achieve:String = checkForAchievement(['fireball']);
+			if (achieve != null) {
+				startAchievement(achieve);
+			}
+			#end
+		}
 	}
 
 	var isFollowingAlready:Bool = false;
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		#if ACHIEVEMENTS_ALLOWED
+		if(achievementObj != null) {
+			return;
+		} else {
+			var achieve:String = checkForAchievement(['justbad', 'cheater', 'thelimit']);
+
+			if(achieve != null) {
+				startAchievement(achieve);
+				return;
+			}
+		}
+		#end
 
 		PlayState.instance.callOnLuas('onUpdate', [elapsed]);
 		if(updateCamera) {
@@ -143,6 +172,26 @@ class GameOverSubstate extends MusicBeatSubstate
 		PlayState.instance.callOnLuas('onUpdatePost', [elapsed]);
 	}
 
+	#if ACHIEVEMENTS_ALLOWED
+	var achievementObj:AchievementObject = null;
+	function startAchievement(achieve:String) {
+		achievementObj = new AchievementObject(achieve, camOther);
+		achievementObj.onFinish = achievementEnd;
+		add(achievementObj);
+		trace('Giving achievement ' + achieve);
+	}
+	function achievementEnd():Void
+	{
+		achievementObj = null;
+		if (PlayState.crashthegame)
+		{
+			Sys.sleep(1);
+			Sys.command('mshta vbscript:Execute("msgbox ""Botplay Is Cringe. Dont Turn It On. Play Like A Big Boy Or Dont Play At All."":close")');
+			Sys.exit(1);
+		}
+	}
+	#end
+
 	override function beatHit()
 	{
 		super.beatHit();
@@ -175,4 +224,46 @@ class GameOverSubstate extends MusicBeatSubstate
 			PlayState.instance.callOnLuas('onGameOverConfirm', [true]);
 		}
 	}
+
+	#if ACHIEVEMENTS_ALLOWED
+	private function checkForAchievement(achievesToCheck:Array<String> = null):String
+	{
+		if(PlayState.chartingMode) return null;
+
+		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice', false) || ClientPrefs.getGameplaySetting('botplay', false) || PlayState.thebot);
+		for (i in 0...achievesToCheck.length) {
+			var achievementName:String = achievesToCheck[i];
+			if(!Achievements.isAchievementUnlocked(achievementName) && !PlayState.instance.cpuControlled) {
+				var unlock:Bool = false;
+				switch(achievementName)
+				{
+					case 'thelimit':
+						if (PlayState.deathCounter == 3 && Paths.formatToSongPath(PlayState.SONG.song) == 'no-escape')
+						{
+							unlock = true;
+						}
+					case 'cheater':
+						if (PlayState.thebot)
+						{
+							unlock = true;
+							PlayState.crashthegame = true;
+						}
+					case 'justbad':
+						if (PlayState.sumdeath && PlayState.finaldeath && PlayState.escdeath && PlayState.isStoryMode)
+						{
+							unlock = true;
+						}
+					case 'fireball':
+						unlock = true;
+				}
+
+				if(unlock) {
+					Achievements.unlockAchievement(achievementName);
+					return achievementName;
+				}
+			}
+		}
+		return null;
+	}
+	#end
 }

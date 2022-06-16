@@ -24,6 +24,7 @@ end
 function goodNoteHit(id, noteData, noteType, isSustainNote)
 	if noteType == 'Attack' then
 		characterPlayAnim('dad', 'attack', true);
+		playSound('Fireball', 1)
 		characterPlayAnim('boyfriend', 'dodge', true);
 		cameraShake(none, 0.01, 0.1); -- none is nothing anyway
 	end
@@ -34,6 +35,7 @@ end
 function noteMiss(id, noteData, noteType, isSustainNote)
 	if noteType == 'Attack' then
 		characterPlayAnim('dad', 'attack', true);
+		playSound('Fireball', 1)
 		characterPlayAnim('boyfriend', 'hurt', true);
 		cameraShake(none, 0.01, 0.1); -- none is nothing anyway
 	end

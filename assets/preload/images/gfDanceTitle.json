@@ -1,10 +1,10 @@
 {	
-	"titlex":-150,
-	"titley":-100,
-	"startx":100,
-	"starty":576,
-	"gfx":512,
-	"gfy":40,
-	"backgroundSprite":"",
+	"titlex":-200,
+	"titley":-180,
+	"startx":0,
+	"starty":5760,
+	"gfx":310,
+	"gfy":0,
+	"backgroundSprite":"Herobrine-Reborn-Thumbnail-BG",
 	"bpm":102
 }

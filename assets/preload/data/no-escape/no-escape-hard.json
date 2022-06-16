@@ -152,11 +152,6 @@
 				[
 					[
 						"badapplelol",
-						"a",
-						""
-					],
-					[
-						"Cinematicsalt",
 						"1",
 						""
 					]
@@ -165,11 +160,6 @@
 			[
 				116862.244897959,
 				[
-					[
-						"Cinematicsalt",
-						"",
-						"2"
-					],
 					[
 						"badapplelol",
 						"b",
@@ -261,10 +251,15 @@
 				117551.020408163,
 				[
 					[
-						"Cam Boom Speed",
-						"1",
-						"4"
-					],
+						"Thunderstorm Trigger",
+						"2",
+						""
+					]
+				]
+			],
+			[
+				117627.551020408,
+				[
 					[
 						"Smooth cam zoom",
 						"0.4",
@@ -273,12 +268,12 @@
 				]
 			],
 			[
-				117551.020408163,
+				117704.081632653,
 				[
 					[
-						"Thunderstorm Trigger",
-						"2",
-						""
+						"Cam Boom Speed",
+						"1",
+						"2"
 					]
 				]
 			],
@@ -306,28 +301,8 @@
 				195918.367346939,
 				[
 					[
-						"Cam Boom Speed",
+						"Thunderstorm Trigger",
 						"0",
-						"82"
-					],
-					[
-						"Smooth cam zoom",
-						"0.001",
-						"20"
-					],
-					[
-						"Hide Hud",
-						"1",
-						""
-					]
-				]
-			],
-			[
-				195918.367346939,
-				[
-					[
-						"Cinematics",
-						"1",
 						""
 					]
 				]
@@ -336,9 +311,19 @@
 				195994.897959184,
 				[
 					[
-						"Thunderstorm Trigger",
-						"0",
+						"Hide Hud",
+						"1",
 						""
+					]
+				]
+			],
+			[
+				196071.428571429,
+				[
+					[
+						"Smooth cam zoom",
+						"0.1",
+						"20"
 					]
 				]
 			]
@@ -7666,8 +7651,7 @@
 					[
 						169897.959183674,
 						2,
-						0,
-						"Attack"
+						0
 					]
 				],
 				"typeOfSection": 0,
@@ -8561,32 +8545,9 @@
 						0
 					],
 					[
-						189030.612244898,
-						3,
-						0
-					],
-					[
 						189566.326530613,
 						0,
 						0
-					],
-					[
-						189107.142857143,
-						2,
-						0,
-						"Attack"
-					],
-					[
-						189183.673469388,
-						3,
-						0,
-						"Attack"
-					],
-					[
-						189336.734693878,
-						2,
-						0,
-						"Attack"
 					],
 					[
 						189489.795918368,
@@ -8599,6 +8560,26 @@
 						3,
 						0,
 						"Attack"
+					],
+					[
+						189183.673469388,
+						3,
+						0
+					],
+					[
+						189107.142857143,
+						2,
+						0
+					],
+					[
+						189336.734693878,
+						2,
+						0
+					],
+					[
+						189030.612244898,
+						3,
+						0
 					]
 				],
 				"altAnim": false,
@@ -8668,24 +8649,6 @@
 						"Attack"
 					],
 					[
-						190331.632653062,
-						2,
-						0,
-						"Attack"
-					],
-					[
-						190408.163265307,
-						1,
-						0,
-						"Attack"
-					],
-					[
-						190637.755102041,
-						1,
-						0,
-						"Attack"
-					],
-					[
 						190714.285714286,
 						0,
 						0,
@@ -8696,6 +8659,21 @@
 						3,
 						0,
 						"Attack"
+					],
+					[
+						190331.632653062,
+						2,
+						0
+					],
+					[
+						190408.163265307,
+						1,
+						0
+					],
+					[
+						190637.755102041,
+						1,
+						0
 					]
 				],
 				"altAnim": false,
@@ -9458,14 +9436,34 @@
 				"bpm": 196
 			},
 			{
-				"gfSection": false,
 				"lengthInSteps": 16,
-				"altAnim": false,
 				"typeOfSection": 0,
 				"sectionNotes": [],
+				"altAnim": false,
+				"gfSection": false,
 				"bpm": 196,
 				"changeBPM": false,
 				"mustHitSection": true
+			},
+			{
+				"lengthInSteps": 16,
+				"typeOfSection": 0,
+				"sectionNotes": [],
+				"altAnim": false,
+				"gfSection": false,
+				"bpm": 196,
+				"changeBPM": false,
+				"mustHitSection": true
+			},
+			{
+				"sectionNotes": [],
+				"typeOfSection": 0,
+				"lengthInSteps": 16,
+				"gfSection": false,
+				"altAnim": false,
+				"mustHitSection": true,
+				"changeBPM": false,
+				"bpm": 196
 			},
 			{
 				"gfSection": false,
