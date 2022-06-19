@@ -7,12 +7,22 @@ class MainMenu extends MusicBeatState
     override public function create() {
         FlxG.mouse.visible = true;
 
-        var btt = new flx.MCbutton(40, 40, "hellow");
-        btt.onClick = function() {
-            MusicBeatState.switchState(new MainMenuState());
-        }
+        var opts:Array<Dynamic> = [
+            ['Story', new StoryMenuState()],
+            ['Freeplay', new FreeplayState()],
+            ['Credits', new CreditsState()],
+            ['Awards', new AchievementsMenuState()],
+            ['Options', new options.OptionsState()]
+        ];
 
-        add(btt);
+        var loops:Int = 0;
+        for (i in opts) {
+            var btt = new flx.MCbutton(40, 40 + 100 * loops, i[0]);
+            btt.onClick = function() { MusicBeatState.switchState(i[1]); }
+            add(btt);
+
+            loops++;
+        }
 
         super.create();
     }

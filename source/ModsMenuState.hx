@@ -3,7 +3,9 @@ package;
 #if desktop
 import Discord.DiscordClient;
 #end
+import flash.geom.Rectangle;
 import flash.text.TextField;
+import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
@@ -11,27 +13,26 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxButtonPlus;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import flixel.tweens.FlxTween;
-import lime.utils.Assets;
 import flixel.system.FlxSound;
-import openfl.utils.Assets as OpenFlAssets;
-import sys.io.File;
-import sys.FileSystem;
+import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
+import flixel.ui.FlxButton;
+import flixel.util.FlxColor;
 import haxe.Json;
 import haxe.format.JsonParser;
+import lime.utils.Assets;
 import openfl.display.BitmapData;
-import flash.geom.Rectangle;
-import flixel.ui.FlxButton;
-import flixel.FlxBasic;
+import openfl.utils.Assets as OpenFlAssets;
+import sys.FileSystem;
 import sys.io.File;
+import sys.io.File;
+
+using StringTools;
 /*import haxe.zip.Reader;
 import haxe.zip.Entry;
 import haxe.zip.Uncompress;
 import haxe.zip.Writer;*/
 
-using StringTools;
 
 class ModsMenuState extends MusicBeatState
 {
@@ -489,7 +490,7 @@ class ModsMenuState extends MusicBeatState
 			}
 			else
 			{
-				MusicBeatState.switchState(new MainMenuState());
+				MusicBeatState.switchState(new menus.MainMenu());
 			}
 		}
 

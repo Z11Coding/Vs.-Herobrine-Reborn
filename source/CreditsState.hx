@@ -10,16 +10,16 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import lime.utils.Assets;
+
+using StringTools;
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
 #end
-import lime.utils.Assets;
-
-using StringTools;
 
 class CreditsState extends MusicBeatState
 {
@@ -223,7 +223,7 @@ class CreditsState extends MusicBeatState
 					colorTween.cancel();
 				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new MainMenuState());
+				MusicBeatState.switchState(new menus.MainMenu());
 				quitting = true;
 			}
 		}

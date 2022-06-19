@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 class MCbutton extends FlxSpriteGroup
 {
@@ -28,27 +29,24 @@ class MCbutton extends FlxSpriteGroup
 
         super(X, Y, 2);
 
-        bg = new FlxSprite().makeGraphic(120, 25, Color);
+        bg = new FlxSprite().loadGraphic(Paths.image("buttondick"));
         var ps = bg.pixels;
         var w = Std.int(bg.width - 1);
         var h = Std.int(bg.height - 1);
 
-        for (y in 0...h) {
-            for (x in 0...w) {
-                var p:Int = ps.getPixel32(x, y);
-                if (y == 0)
-                    ps.setPixel32(x, y, p - 0x00909090);
-                if (y == h)
-                    ps.setPixel32(x, y, p + 0x00606060);
+        for (y in 1...h) {
+            for (x in 1...w) {
+                var val:Int = 100;
+                if (Math.random() > 0.96) {
+                    val = FlxG.random.int(85, 105);
+                }
+                ps.setPixel(x, y, FlxColor.fromRGB(val, val, val));
             }
         }
 
-        ps.setPixel(0, 0, ps.getPixel(0, 0) + 0x202020);
-        ps.setPixel(w, 0, ps.getPixel(w, 0) + 0x707070);
-        ps.setPixel(0, h, ps.getPixel(0, h) - 0x707070);
-        ps.setPixel(w, h, ps.getPixel(w, h) + 0x707070);
-
-        label = new FlxText(0, 0, 100, '', 12);
+        label = new FlxText(4, -10, 100, '', 20);
+        label.font = Paths.font("vcr.ttf");
+        label.alignment = CENTER;
         text = Text;
         bg.scale.set(3, 3);
         bg.updateHitbox();

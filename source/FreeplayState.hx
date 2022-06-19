@@ -3,6 +3,7 @@ package;
 #if desktop
 import Discord.DiscordClient;
 #end
+import WeekData;
 import editors.ChartingState;
 import flash.text.TextField;
 import flixel.FlxG;
@@ -11,18 +12,18 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import flixel.tweens.FlxTween;
-import lime.utils.Assets;
 import flixel.system.FlxSound;
+import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
-import WeekData;
+
+using StringTools;
 #if MODS_ALLOWED
 import sys.FileSystem;
 #end
 
-using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
@@ -317,7 +318,7 @@ class FreeplayState extends MusicBeatState
 				colorTween.cancel();
 			}
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			MusicBeatState.switchState(new menus.MainMenu());
 		}
 
 		if(ctrl)

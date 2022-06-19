@@ -9,14 +9,15 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import flixel.system.FlxSound;
+
+using StringTools;
 #if MODS_ALLOWED
 import sys.FileSystem;
 #end
 
-using StringTools;
 
 class MasterEditorMenu extends MusicBeatState
 {
@@ -107,7 +108,7 @@ class MasterEditorMenu extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			MusicBeatState.switchState(new MainMenuState());
+			MusicBeatState.switchState(new menus.MainMenu());
 		}
 
 		if (controls.ACCEPT)
