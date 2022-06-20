@@ -1,25 +1,26 @@
 package;
 
 import flixel.FlxG;
-import openfl.utils.Assets;
-import lime.utils.Assets as LimeAssets;
+import flixel.system.FlxSound;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
-import flixel.system.FlxSound;
+import lime.utils.Assets as LimeAssets;
+import openfl.utils.Assets;
+
+using StringTools;
 #if sys
-import sys.io.File;
 import sys.FileSystem;
+import sys.io.File;
 #else
 import openfl.utils.Assets;
 #end
 
-using StringTools;
 
 class CoolUtil
 {
 	public static var defaultDifficulties:Array<String> = [
-		'Easy',
-		'Normal',
+		/*'Easy',
+		'Normal',*/
 		'Hard'
 	];
 	public static var defaultDifficulty:String = 'Normal'; //The chart that has no suffix and starting difficulty on Freeplay/Story Mode
