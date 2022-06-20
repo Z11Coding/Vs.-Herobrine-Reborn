@@ -1,77 +1,77 @@
 {
 	"animations": [
 		{
-			"loop": false,
 			"offsets": [
-				0,
-				0
+				202,
+				220
 			],
+			"indices": [],
+			"fps": 24,
 			"anim": "idle",
-			"fps": 24,
-			"name": "idle",
-			"indices": []
+			"loop": false,
+			"name": "idle"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-158,
-				-46
+				302,
+				179
 			],
+			"indices": [],
+			"fps": 24,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "down",
-			"indices": []
+			"loop": false,
+			"name": "down"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-169,
-				35
+				164,
+				228
 			],
+			"indices": [],
+			"fps": 24,
 			"anim": "singRIGHT",
-			"fps": 24,
-			"name": "right",
-			"indices": []
+			"loop": false,
+			"name": "right"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-10,
-				20
+				200,
+				580
 			],
+			"indices": [],
+			"fps": 24,
+			"anim": "Fireball",
+			"loop": false,
+			"name": "shooting fire ball"
+		},
+		{
+			"offsets": [
+				250,
+				310
+			],
+			"indices": [],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "left",
-			"indices": []
+			"loop": false,
+			"name": "left"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-6,
-				380
+				214,
+				602
 			],
+			"indices": [],
+			"fps": 24,
 			"anim": "singUP",
-			"fps": 24,
-			"name": "up",
-			"indices": []
-		},
-		{
 			"loop": false,
-			"offsets": [
-				-10,
-				370
-			],
-			"anim": "attack",
-			"fps": 24,
-			"name": "shooting fire ball",
-			"indices": []
+			"name": "up"
 		}
 	],
 	"no_antialiasing": false,
 	"image": "characters/Brin_Normal",
 	"position": [
 		150,
-		100
+		300
 	],
 	"healthicon": "Brin",
 	"flip_x": false,
@@ -81,9 +81,9 @@
 		122
 	],
 	"camera_position": [
-		-80,
-		300
+		-440,
+		100
 	],
 	"sing_duration": 6.1,
-	"scale": 1.1
+	"scale": 1.2
 }

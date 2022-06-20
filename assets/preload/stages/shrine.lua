@@ -43,6 +43,13 @@ function onCreate()
 		addLuaSprite('bg1', false);
 	end
 
+	if (songName == 'crashlog') then
+		makeLuaSprite('bg1', 'night_sky',-1270,300);
+		setScrollFactor('bg1', 0.99, 0.99);
+		scaleObject('bg1', 2,2);
+		addLuaSprite('bg1', false);
+	end
+
 	makeLuaSprite('bg2', 'backmc', -1070, 1200);
 	setScrollFactor('bg2', 0.99, 0.99);
 	scaleObject('bg2', 1.7,2.7);
@@ -53,8 +60,8 @@ function onCreate()
 	scaleObject('fg', 1.1,1,1);
 	addLuaSprite('fg', false);
 
-	makeAnimatedLuaSprite('thesummoning', 'shrin', 600, 1400);
-	addAnimationByPrefix('thesummoning', 'idle', 'shrine instance 1', 24, false);
+	makeAnimatedLuaSprite('thesummoning', 'Shrine', 600, 1000);
+	addAnimationByPrefix('thesummoning', 'idle', 'shrine', 24, false);
 	setScrollFactor('thesummoning', 0.99, 0.99);
 	scaleObject('thesummoning', 2.6,2.6);
 	addLuaSprite('thesummoning', false);
@@ -135,6 +142,20 @@ function onUpdatePost()
 				setProperty('vocals.time', getPropertyFromClass('Conductor', 'songPosition'))
 		end
 		if curStep > 495 then
+			doTweenAlpha('skipfuera','skip',0,2,'linear')
+			didskip = true
+		end
+	end
+
+	if (songName == 'crashlog') then
+		if getPropertyFromClass('flixel.FlxG', 'keys.justPressed.SPACE') and not getProperty('startingSong') and didskip == false then
+				didskip = true
+				removeLuaText('skip');
+				setPropertyFromClass('Conductor', 'songPosition', 18461) -- it is counted by milliseconds, 1000 = 1 second
+				setPropertyFromClass('flixel.FlxG', 'sound.music.time', getPropertyFromClass('Conductor', 'songPosition'))
+				setProperty('vocals.time', getPropertyFromClass('Conductor', 'songPosition'))
+		end
+		if curStep > 239 then
 			doTweenAlpha('skipfuera','skip',0,2,'linear')
 			didskip = true
 		end

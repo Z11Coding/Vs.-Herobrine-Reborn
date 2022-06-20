@@ -298,6 +298,8 @@ class PlayState extends MusicBeatState
 	public static var crashthegame:Bool = false; //Cringe Nae Nae Baby.
 	public static var diedcuz:String = '';
 	var warning:FlxSprite;
+	var titleblocks:FlxSprite;
+	var titleblockstext:FlxText;
 
 	var precacheList:Map<String, String> = new Map<String, String>();
 
@@ -1387,6 +1389,43 @@ class PlayState extends MusicBeatState
 		warning.cameras = [camCustom];
 		warning.alpha = 0;
 		add(warning);
+
+		titleblocks = new FlxSprite(0, 100);
+		//titleblocks.setGraphicSize(FlxG.width, FlxG.height);
+		titleblocks.frames = Paths.getSparrowAtlas('Herobrine_Titleboard');
+		titleblocks.animation.addByPrefix('card', 'Titleboard', 24, false);
+		titleblocks.scrollFactor.set();
+		titleblocks.cameras = [camCustom];
+		//titleblocks.alpha = 0;
+		add(titleblocks);
+		
+		titleblockstext = new FlxText(250,230,1280,"",32,true);
+		titleblockstext.alignment = LEFT;
+		titleblockstext.font = Paths.font('vcr.ttf');
+		titleblockstext.width = titleblocks.width;
+		//titleblockstext.setGraphicSize(Std.parseInt(titleblocks.width));
+		titleblockstext.scrollFactor.set();
+		titleblockstext.cameras = [camCustom];
+		titleblockstext.alpha = 0;
+		titleblockstext.borderSize = 4;
+		add(titleblockstext);
+
+		switch (curSong.toLowerCase())
+		{
+			case 'summon':
+				titleblockstext.text = 'Summon-JDST';
+			case 'final-warning':
+				titleblockstext.text = 'Final-Warning-Z11Gaming';
+				titleblockstext.x = 150;
+			case 'no-escape':
+				titleblockstext.text = 'No-Escape-Z11Gaming';
+				titleblockstext.x = 150;
+			case 'crashlog':
+				titleblockstext.text = 'Crashlog-JDST';
+				titleblockstext.x = 150;
+			default:
+				titleblockstext.text = '???-???';
+		}
 	}
 
 	function set_songSpeed(value:Float):Float
@@ -2074,6 +2113,7 @@ class PlayState extends MusicBeatState
 				switch (swagCounter)
 				{
 					case 0:
+						titleblocks.animation.play('card');
 						FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
 					case 1:
 						countdownReady = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
@@ -2761,28 +2801,38 @@ class PlayState extends MusicBeatState
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
 
+		if (titleblocks.animation.curAnim != null && titleblocks.animation.curAnim.curFrame == 15)
+		{
+			FlxTween.tween(titleblockstext, {alpha: 1}, 1, {ease: FlxEase.expoInOut});
+		}
+
+		if (titleblocks.animation.curAnim != null && titleblocks.animation.curAnim.curFrame == 60)
+		{
+			FlxTween.tween(titleblockstext, {alpha: 0}, 0.2, {ease: FlxEase.expoInOut});
+		}
+
+		if (titleblocks.animation.curAnim != null && titleblocks.animation.curAnim.finished)
+		{
+			titleblocks.alpha = 0;
+		}
+
 		if (cpuControlled != thebot)
 		{
 			thebot = true;
 			crashthegame = true;
 		}
 
-		if (!sumdeath && deathCounter >= 0)
+		if (!sumdeath && deathCounter >= 0 && curSong.toLowerCase() == "summon")
 		{
 			sumdeath = true;
 		}
 
-		if (!finaldeath && deathCounter >= 0)
+		if (!finaldeath && deathCounter >= 0 && curSong.toLowerCase() == "final-warning")
 		{
 			finaldeath = true;
 		}
 
-		if (!finaldeath && deathCounter >= 0)
-		{
-			finaldeath = true;
-		}
-
-		if (!escdeath && deathCounter >= 0)
+		if (!escdeath && deathCounter >= 0 && curSong.toLowerCase() == "no-escape")
 		{
 			escdeath = true;
 		}
@@ -4402,6 +4452,16 @@ class PlayState extends MusicBeatState
 
 		if (daNote.noteType == 'Attack')
 		{
+			if(dad.animation.getByName('attack') != null && dad.animation.curAnim.name == 'idle') {
+				dad.playAnim('attack', true);
+				dad.specialAnim = true;
+			}
+			if(boyfriend.animation.getByName('hurt') != null) {
+				boyfriend.playAnim('hurt', true);
+				boyfriend.specialAnim = true;
+			}
+			FlxG.sound.play(Paths.sound('Fireball'));
+			camGame.shake(0.01, 0.1);
 			diedcuz = 'Attack';
 			songMisses++;
 		}
@@ -4534,8 +4594,6 @@ class PlayState extends MusicBeatState
 								boyfriend.playAnim('hurt', true);
 								boyfriend.specialAnim = true;
 							}
-						case 'Attack': //Hurt note
-							diedcuz = 'Attack';
 					}
 				}
 
@@ -4561,6 +4619,21 @@ class PlayState extends MusicBeatState
 			if(!note.noAnimation) {
 				var daAlt = '';
 				if(note.noteType == 'Alt Animation') daAlt = '-alt';
+				if (note.noteType == 'Attack')
+				{
+					if(dad.animation.getByName('attack') != null && dad.animation.curAnim.name == 'idle') {
+						dad.playAnim('attack', true);
+						dad.specialAnim = true;
+					}
+					if(boyfriend.animation.getByName('hurt') != null) {
+						boyfriend.playAnim('hurt', true);
+						boyfriend.specialAnim = true;
+					}
+					FlxG.sound.play(Paths.sound('Fireball'));
+					camGame.shake(0.01, 0.1);
+					diedcuz = 'Attack';
+					songMisses++;
+				}
 
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
 
@@ -4911,13 +4984,16 @@ class PlayState extends MusicBeatState
 			notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
 		}
 
-		switch(curBeat)
+		if (curSong.toLowerCase() == 'no-escape')
 		{
-			case 4:
-				FlxTween.tween(warning, {alpha: 1}, 1, {ease: FlxEase.expoInOut});
+			switch(curBeat)
+			{
+					case 4:
+						FlxTween.tween(warning, {alpha: 1}, 1, {ease: FlxEase.expoInOut});
 
-			case 124:
-				FlxTween.tween(warning, {alpha: 0}, 1, {ease: FlxEase.expoInOut});
+					case 124:
+						FlxTween.tween(warning, {alpha: 0}, 1, {ease: FlxEase.expoInOut});
+			}
 		}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)

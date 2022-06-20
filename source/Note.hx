@@ -142,6 +142,19 @@ class Note extends FlxSprite
 					noMissAnimation = true;
 				case 'GF Sing':
 					gfNote = true;
+				case 'Attack':
+					reloadNote('ATTACK');
+					colorSwap.hue = 0;
+					colorSwap.saturation = 0;
+					colorSwap.brightness = 0;
+					if(isSustainNote) {
+						missHealth = 0.2;
+						hitHealth = 0;
+					} else {
+						missHealth = 0.5;
+						hitHealth = 0;
+					}
+					hitCausesMiss = false;
 			}
 			noteType = value;
 		}
