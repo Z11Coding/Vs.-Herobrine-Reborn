@@ -1,12 +1,17 @@
 package;
 
-import flixel.graphics.FlxGraphic;
-#if desktop
-import Discord.DiscordClient;
-#end
+import Achievements;
+import Conductor.Rating;
+import DialogueBoxPsych;
+import FunkinLua;
+import Note.EventNote;
 import Section.SwagSection;
 import Song.SwagSong;
+import StageData;
 import WiggleEffect.WiggleEffectType;
+import animateatlas.AtlasFrameMaker;
+import editors.CharacterEditorState;
+import editors.ChartingState;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -21,9 +26,14 @@ import flixel.addons.effects.FlxTrailArea;
 import flixel.addons.effects.chainable.FlxEffectSprite;
 import flixel.addons.effects.chainable.FlxWaveEffect;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.effects.particles.FlxEmitter;
+import flixel.effects.particles.FlxParticle;
+import flixel.graphics.FlxGraphic;
 import flixel.graphics.atlas.FlxAtlas;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.group.FlxSpriteGroup;
+import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
@@ -34,6 +44,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
+import flixel.util.FlxSave;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
@@ -42,28 +53,18 @@ import lime.utils.Assets;
 import openfl.Lib;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
+import openfl.events.KeyboardEvent;
 import openfl.filters.BitmapFilter;
 import openfl.utils.Assets as OpenFlAssets;
-import editors.ChartingState;
-import editors.CharacterEditorState;
-import flixel.group.FlxSpriteGroup;
-import flixel.input.keyboard.FlxKey;
-import Note.EventNote;
-import openfl.events.KeyboardEvent;
-import flixel.effects.particles.FlxEmitter;
-import flixel.effects.particles.FlxParticle;
-import flixel.util.FlxSave;
-import animateatlas.AtlasFrameMaker;
-import Achievements;
-import StageData;
-import FunkinLua;
-import DialogueBoxPsych;
-import Conductor.Rating;
+
+using StringTools;
+#if desktop
+import Discord.DiscordClient;
+#end
 #if sys
 import sys.FileSystem;
 #end
 
-using StringTools;
 
 class PlayState extends MusicBeatState
 {
@@ -133,11 +134,15 @@ class PlayState extends MusicBeatState
 	public var gf:Character = null;
 	public var boyfriend:Boyfriend = null;
 
+    public var fireball:FlxSprite = new FlxSprite();
+
 	public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
 	public var eventNotes:Array<EventNote> = [];
 
 	private var strumLine:FlxSprite;
+
+    public var chat:flx.Chat;
 
 	//Handles the new epic mega sexy cam code that i've done
 	private var camFollow:FlxPoint;
@@ -958,6 +963,13 @@ class PlayState extends MusicBeatState
 		boyfriendGroup.add(boyfriend);
 		startCharacterLua(boyfriend.curCharacter);
 
+        fireball.loadGraphic(Paths.image("thrown_ball"));
+        fireball.x = dad.x + dad.width * 0.5;
+        fireball.y = dad.y + dad.height * 0.5;
+        fireball.alpha = 0.001;
+        // cuz it crashed if i initiated it earlier and added it between dadGroup and boyfriendGroup straight up 
+        insert(members.indexOf(boyfriendGroup) - 1, fireball);
+
 		var camPos:FlxPoint = new FlxPoint(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if(gf != null)
 		{
@@ -978,9 +990,12 @@ class PlayState extends MusicBeatState
 				addBehindGF(fastCar);
 
 			case 'shrine':
-				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069); //nice
+				var evilTrail = new FlxTrail(dad, null, 3, 3, 0.4, 0.1);
 				addBehindDad(evilTrail);
 		}
+
+        chat = new flx.Chat();
+        add(chat);
 
 		var file:String = Paths.json(songName + '/dialogue'); //Checks for json/Psych Engine dialogue
 		if (OpenFlAssets.exists(file)) {
@@ -4452,15 +4467,10 @@ class PlayState extends MusicBeatState
 
 		if (daNote.noteType == 'Attack')
 		{
-			if(dad.animation.getByName('attack') != null && dad.animation.curAnim.name == 'idle') {
-				dad.playAnim('attack', true);
-				dad.specialAnim = true;
-			}
 			if(boyfriend.animation.getByName('hurt') != null) {
 				boyfriend.playAnim('hurt', true);
 				boyfriend.specialAnim = true;
 			}
-			FlxG.sound.play(Paths.sound('Fireball'));
 			camGame.shake(0.01, 0.1);
 			diedcuz = 'Attack';
 			songMisses++;
@@ -4616,24 +4626,20 @@ class PlayState extends MusicBeatState
 			}
 			health += note.hitHealth * healthGain;
 
+            if (note.noteType == 'Attack')
+            {
+                FlxG.sound.play(Paths.sound('parry'), 0.5);
+                if(boyfriend.animation.getByName('dodge') != null) {
+                    boyfriend.playAnim('dodge', true);
+                    boyfriend.specialAnim = true;
+                    fireball.alpha = 0.0001;
+                }
+                camGame.shake(0.01, 0.1);
+            }
+
 			if(!note.noAnimation) {
 				var daAlt = '';
 				if(note.noteType == 'Alt Animation') daAlt = '-alt';
-				if (note.noteType == 'Attack')
-				{
-					if(dad.animation.getByName('attack') != null && dad.animation.curAnim.name == 'idle') {
-						dad.playAnim('attack', true);
-						dad.specialAnim = true;
-					}
-					if(boyfriend.animation.getByName('hurt') != null) {
-						boyfriend.playAnim('hurt', true);
-						boyfriend.specialAnim = true;
-					}
-					FlxG.sound.play(Paths.sound('Fireball'));
-					camGame.shake(0.01, 0.1);
-					diedcuz = 'Attack';
-					songMisses++;
-				}
 
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
 

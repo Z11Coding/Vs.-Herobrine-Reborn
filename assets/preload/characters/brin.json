@@ -1,70 +1,70 @@
 {
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [
-				202,
+				0,
 				220
 			],
-			"indices": [],
-			"fps": 24,
 			"anim": "idle",
-			"loop": false,
-			"name": "idle"
-		},
-		{
-			"offsets": [
-				302,
-				179
-			],
-			"indices": [],
 			"fps": 24,
-			"anim": "singDOWN",
-			"loop": false,
-			"name": "down"
+			"name": "idle",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
-				164,
+				62,
+				79
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "down",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-96,
 				228
 			],
-			"indices": [],
-			"fps": 24,
 			"anim": "singRIGHT",
-			"loop": false,
-			"name": "right"
+			"fps": 24,
+			"name": "right",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				200,
-				580
-			],
-			"indices": [],
-			"fps": 24,
-			"anim": "Fireball",
-			"loop": false,
-			"name": "shooting fire ball"
-		},
-		{
-			"offsets": [
-				250,
 				310
 			],
-			"indices": [],
-			"fps": 24,
 			"anim": "singLEFT",
+			"fps": 24,
+			"name": "left",
+			"indices": []
+		},
+		{
 			"loop": false,
-			"name": "left"
+			"offsets": [
+				0,
+				820
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "up",
+			"indices": []
 		},
 		{
 			"offsets": [
-				214,
-				602
+				10,
+				570
 			],
 			"indices": [],
 			"fps": 24,
-			"anim": "singUP",
+			"anim": "attack",
 			"loop": false,
-			"name": "up"
+			"name": "shooting fire ball"
 		}
 	],
 	"no_antialiasing": false,
@@ -81,8 +81,8 @@
 		122
 	],
 	"camera_position": [
-		-440,
-		100
+		-280,
+		-120
 	],
 	"sing_duration": 6.1,
 	"scale": 1.2

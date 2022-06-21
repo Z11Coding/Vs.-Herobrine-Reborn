@@ -1,12 +1,15 @@
 package;
 
+import editors.ChartingState;
+import flash.display.BitmapData;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
+import flixel.system.debug.console.ConsoleUtil;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import flash.display.BitmapData;
-import editors.ChartingState;
 
 using StringTools;
 
@@ -154,6 +157,7 @@ class Note extends FlxSprite
 						missHealth = 0.5;
 						hitHealth = 0;
 					}
+                    noAnimation = true;
 					hitCausesMiss = false;
 			}
 			noteType = value;
@@ -394,6 +398,9 @@ class Note extends FlxSprite
 		}
 	}
 
+    public var pseudoHit:Bool = false;
+
+    var ballTween:FlxTween = null;
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -420,6 +427,32 @@ class Note extends FlxSprite
 					wasGoodHit = true;
 			}
 		}
+
+        if (!inEditor && strumTime <= Conductor.songPosition + 200 && !pseudoHit && noteType.toLowerCase() == 'attack') {
+            FlxG.sound.play(Paths.sound('fireball'));
+            var d = PlayState.instance.dad;
+            var b = PlayState.instance.boyfriend;
+            var f = PlayState.instance.fireball;
+
+            f.x = d.x;
+            f.y = d.y + d.height * 0.5;
+            f.angle = CoolUtil.angolate(f, b) - 90;
+            f.alpha = 1;
+            if (ballTween != null) {
+                ballTween.active = false;
+                ballTween.cancel();
+            }
+            ballTween = FlxTween.tween(f, {y: b.y, x: b.x + 40},
+            0.2, {onComplete: function(twn:FlxTween) {
+                    f.alpha = 0.0001;
+                }
+            });
+
+            d.playAnim('attack', true);
+            d.specialAnim = true;
+
+            pseudoHit = true;
+        }
 
 		if (tooLate && !inEditor)
 		{

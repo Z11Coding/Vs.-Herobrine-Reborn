@@ -106,6 +106,15 @@ class CoolUtil
 		return maxKey;
 	}
 
+    /**
+        * returns an angle that makes `source` point towards `target` 
+        *
+        * >mfw it actually works 
+    **/
+    inline public static function angolate(source:Dynamic, target:Dynamic, angleMod:Float = 0):Float {
+        return 180 * Math.atan2(source.y - target.y, source.x - target.x) / Math.PI + angleMod;
+    }
+
 	public static function numberArray(max:Int, ?min = 0):Array<Int>
 	{
 		var dumbArray:Array<Int> = [];

@@ -44,7 +44,7 @@ class MCbutton extends FlxSpriteGroup
             }
         }
 
-        label = new FlxText(10, -10, 100, '', 20);
+        label = new FlxText(20, -10, 100, '', 20);
         label.font = Paths.font("vcr.ttf");
         label.alignment = CENTER;
         text = Text;
